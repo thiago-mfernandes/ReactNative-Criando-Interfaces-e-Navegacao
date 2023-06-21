@@ -1,10 +1,9 @@
 import * as S from "./styles";
 
-export function Groups() {
+export function Loading() {
   return (
     <S.Container>
-      <S.Text>Whereas after</S.Text>
+      <S.LoadIndicator />
     </S.Container>
   );
 }
-
