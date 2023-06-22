@@ -13,6 +13,8 @@ export function Header({ showBackButton = true }: BackButtonProps) {
         showBackButton &&
         <S.BackButton>
           <Icon name="chevron-left" size={32} color="#fff" />
+
+          
         </S.BackButton>
       }
       <S.Logo source={Logo} />
