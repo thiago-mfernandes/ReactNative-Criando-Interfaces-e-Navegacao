@@ -1,12 +1,12 @@
 import * as S from "./styles";
 import Logo from "../../assets/logo.png";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Feather';
 
 interface BackButtonProps {
   showBackButton?: boolean;
 }
 
-export function Header({ showBackButton = true }: BackButtonProps) {
+export function Header({ showBackButton = false }: BackButtonProps) {
   return (
     <S.Container>
       {

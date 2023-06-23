@@ -2,6 +2,8 @@ import { ThemeProvider } from "styled-components";
 import { Groups } from "./src/screens/Groups";
 import { theme } from "./src/theme";
 import { StatusBar } from "react-native";
+import { NewGroup } from "./src/screens/NewGroup";
+import { Players } from "./src/screens/Players";
 
 export default function App() {
   return (
@@ -11,7 +13,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent //iniciar o StatusBar no topo do dispositivo
       />
-      <Groups />
+      <Players />
     </ThemeProvider>
   );
 }
