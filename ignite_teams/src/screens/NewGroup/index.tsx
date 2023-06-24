@@ -1,6 +1,7 @@
 import * as S from "./styles";
-import { Header } from "../../components/Header";
 import Icon from "react-native-vector-icons/Feather";
+
+import { Header } from "../../components/Header";
 import { theme } from "../../theme";
 import { Highlight } from "../../components/Highlight";
 import { Button } from "../../components/Button";
@@ -19,9 +20,9 @@ export function NewGroup(){
         />
         <Highlight 
           title="Nova Turma" 
-          subtitle="Crie o grupo para adicionar pessoas:" 
+          subtitle="Crie um grupo e adicione pessoas" 
         />
-        <Input placeholder="Nome da Turma"/>
+        <Input placeholder="Nome da Grupo"/>
         <Button title="Criar" style={{ marginTop: 20 }}/>
       </S.Content>
     </S.Container>

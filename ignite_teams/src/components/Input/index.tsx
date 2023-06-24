@@ -1,12 +1,12 @@
-import { TextInputProps } from "react-native";
 import * as S from "./styles";
+
+import { TextInputProps } from "react-native";
 import { useTheme } from "styled-components/native";
 
-interface InputProps extends TextInputProps {
-
-}
+interface InputProps extends TextInputProps {}
 
 export function Input({ ...rest}: InputProps){
+  
   //devolve o tema do styled components
   const { colors } = useTheme();
 

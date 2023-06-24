@@ -1,15 +1,16 @@
+import * as S from "./styles";
 import { useState } from "react";
+import { FlatList } from "react-native";
+
 import { GroupCard } from "../../components/GroupCard";
 import { Header } from "../../components/Header";
 import { Highlight } from "../../components/Highlight";
-import * as S from "./styles";
-import { FlatList } from "react-native";
 import { ListEmpty } from "../../components/ListEmpty";
 import { Button } from "../../components/Button";
 
 export function Groups() {
 
-  const[groups, setGroups] = useState<string[]>([]);
+  const[groups, setGroups] = useState<string[]>(['Turma da Igreja']);
 
   return (
     <S.Container>
@@ -23,7 +24,7 @@ export function Groups() {
         renderItem={({ item }) => (
           <GroupCard 
             title={String(item)}
-            //onPress={() => {}}
+            onPress={() => {}}
          />
         )}
         //qual componente quero renderizar quando minha lista estiver vazia

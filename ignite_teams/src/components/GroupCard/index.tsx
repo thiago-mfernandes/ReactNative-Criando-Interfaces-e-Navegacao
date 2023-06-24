@@ -1,7 +1,8 @@
-import { theme } from "../../theme";
 import * as S from "./styles";
-import Icon from "react-native-vector-icons/Feather";
 import { TouchableOpacityProps } from "react-native";
+
+import Icon from "react-native-vector-icons/Feather";
+import { theme } from "../../theme";
 
 interface GroupCardProps extends TouchableOpacityProps {
   title: string;
