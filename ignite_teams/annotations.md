@@ -8,3 +8,9 @@ essa parte é do core de navegacao
 
 essa parte é da estrategia de stack-navigation
 ```npm install @react-navigation/native-stack```
+
+https://www.dicionariodenomesproprios.com.br/nomes-femininos/f/
+
+
+
+

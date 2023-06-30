@@ -12,17 +12,25 @@ import { Filter } from "../../components/Filter";
 import { PlayCard } from "../../components/PlayCard";
 import { ListEmpty } from "../../components/ListEmpty";
 import { Button } from "../../components/Button";
+import { useRoute } from "@react-navigation/native";
+
+interface RouteParams {
+  group: string;
+}
 
 export function Players(){
   const { colors } = useTheme();
   const [team, setTeam] = useState('Time 01');
-  const [players, setPlayers] = useState(['a', 'b', 'c']);
+  const [players, setPlayers] = useState([]);
+
+  const route = useRoute();
+  const { group } = route.params as RouteParams;
 
   return (
     <S.Container>
       <Header showBackButton />
       <Highlight 
-        title="Nome da turma"
+        title={group}
         subtitle="Adicione a galera e separe os times"
       />
 

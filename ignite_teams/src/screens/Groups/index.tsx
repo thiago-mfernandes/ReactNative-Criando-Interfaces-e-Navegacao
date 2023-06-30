@@ -1,17 +1,18 @@
 import * as S from "./styles";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 
 import { GroupCard } from "../../components/GroupCard";
 import { Header } from "../../components/Header";
 import { Highlight } from "../../components/Highlight";
 import { ListEmpty } from "../../components/ListEmpty";
 import { Button } from "../../components/Button";
+import { groupGetAll } from "../../storage/group/groupGetAll";
 
 export function Groups() {
 
-  const[groups, setGroups] = useState<string[]>(['Turma da Igreja']);
+  const[groups, setGroups] = useState<string[]>([]);
 
   //useNavigation é o roteador
   /**
@@ -26,8 +27,22 @@ export function Groups() {
 
     //navigation.navigate('new'); 1s estrategia
     navigation.navigate('new'); //2a estrategia
-    
   }
+
+  async function fetchGroups(){
+    try {
+      const data = await groupGetAll();
+      setGroups(data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //useFocusEffect vai ser executado toda vez q eu voltar na tela de groups, haverá um novo fecth no storage e os dados na tela vao se manter atualizados
+  useFocusEffect(useCallback(() => {
+    console.log("useFocusEffect executou");
+    fetchGroups();
+  },[]));
 
   return (
     <S.Container>
