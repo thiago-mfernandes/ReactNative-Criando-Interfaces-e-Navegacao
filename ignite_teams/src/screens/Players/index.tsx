@@ -12,13 +12,15 @@ import { Filter } from "../../components/Filter";
 import { PlayCard } from "../../components/PlayCard";
 import { ListEmpty } from "../../components/ListEmpty";
 import { Button } from "../../components/Button";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { AppError } from "../../utils/AppError";
 import { playerAddByGroup } from "../../storage/player/playerAddByGroup";
 import { playersGetByGroup } from "../../storage/player/playersGetByGroup";
 import { playersGetByGroupAndTeam } from "../../storage/player/playersGetByGroupAndTeam";
 import { PlayerStorageDTO } from "../../storage/player/PlayerStorageDTO";
 import { playerRemovedByGroup } from "../../storage/player/playerRemovedByGroup";
+import { groupRemoveByName } from "../../storage/group/groupRemoveByName";
+import { Loading } from "../../components/Loading";
 
 interface RouteParams {
   group: string;
@@ -27,6 +29,7 @@ interface RouteParams {
 //useRef é usado para anotar a referencia de um componente e acessar na arvore de elementos
 
 export function Players(){
+  const [isLoading, setIsLoading] = useState(true);
   const { colors } = useTheme();
   const [team, setTeam] = useState('Time 01');
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
@@ -35,6 +38,7 @@ export function Players(){
   const newPlayerInputRef = useRef<TextInput>(null);
 
   const route = useRoute();
+  const navigation = useNavigation();
   const { group } = route.params as RouteParams;
 
   async function handleAddPlayer() {
@@ -70,12 +74,29 @@ export function Players(){
 
   async function fetchPlayersByTeam(){
     try {
+      //aplico loading na pagina
+      setIsLoading(true);
+
       // recebo os jogadores de cada time atraves da funcao
       const playersByTeam = await playersGetByGroupAndTeam(group, team);
       setPlayers(playersByTeam);
+      
     } catch (error) {
       console.log(error);
       Alert.alert("Pessoas", "Não foi possível carregar as pessoas do time selecionado.")
+    } finally {
+      //setar o loading como falso
+      setIsLoading(false);      
+    }
+  }
+
+  async function groupRemove(){
+    try {
+      await groupRemoveByName(group);
+      navigation.navigate('groups');
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover grupo", "Não foi possível remover o grupo.")
     }
   }
 
@@ -87,6 +108,13 @@ export function Players(){
       console.log(error);
       Alert.alert("Remover pessoa", "Não foi possível remover essa pessoa.");
     }
+  }
+
+  async function handleGroupRemove() {
+    Alert.alert("Remover", "Deseja remover o Grupo?",[
+      { text: "Não", style: "cancel" },
+      { text: "Sim", onPress: () => groupRemove()}
+    ]);    
   }
 
   useEffect(() => {
@@ -139,33 +167,37 @@ export function Players(){
         </S.TotalPlayers>
       </S.HeaderList>
 
-      <FlatList 
-        data={players}
-        keyExtractor={ item => item.name }
-        // item da lista
-        renderItem={({ item }) => (
-          <PlayCard 
-            name={item.name} 
-            onRemove={() => handleRemovePlayer(item.name)}
-          />
-        )}
-        //lista vazia
-        ListEmptyComponent={() => (
-          <ListEmpty message="Não há pessoas nesse time." />
-        )}
-        showsVerticalScrollIndicator={false} //barra de rolagem
-        /**
-         * 1.posso passar um array no container, sendo a primeira propriedade aplicada qdo a flalist chegar ao fim, vai ter um padding bottom
-         * 2.na segunda propriedade, uma condicao que soh vai ser aplicada se nao houver players para centralizar o texto de lista vazia no centro da tela
-         */
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          players.length === 0 && { flex: 1 }
-        ]}
-      />
+      {
+        isLoading ? <Loading /> : 
+        <FlatList 
+          data={players}
+          keyExtractor={ item => item.name }
+          // item da lista
+          renderItem={({ item }) => (
+            <PlayCard 
+              name={item.name} 
+              onRemove={() => handleRemovePlayer(item.name)}
+            />
+          )}
+          //lista vazia
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há pessoas nesse time." />
+          )}
+          showsVerticalScrollIndicator={false} //barra de rolagem
+          /**
+           * 1.posso passar um array no container, sendo a primeira propriedade aplicada qdo a flalist chegar ao fim, vai ter um padding bottom
+           * 2.na segunda propriedade, uma condicao que soh vai ser aplicada se nao houver players para centralizar o texto de lista vazia no centro da tela
+           */
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            players.length === 0 && { flex: 1 }
+          ]}
+        />
+      }
       <Button 
         title="Remover Turma"
         type="secondary"
+        onPress={handleGroupRemove}
       />
     </S.Container>
   );

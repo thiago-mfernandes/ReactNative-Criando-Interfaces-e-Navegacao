@@ -20,10 +20,14 @@ export function NewGroup(){
 
   async function handleNewGroup(){
     try {
+      if(group.trim().length === 0){
+        return Alert.alert("Novo Grupo", "Informe o nome da turma.")
+      }
       //armazena no storage o estado capturado no input
       await groupCreate(group);      
       //passo o grupo por parametro pela rota players
       navigation.navigate('players', { group: group });
+      
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("Novo Grupo", error.message);

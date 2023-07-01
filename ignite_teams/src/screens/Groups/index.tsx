@@ -9,10 +9,12 @@ import { Highlight } from "../../components/Highlight";
 import { ListEmpty } from "../../components/ListEmpty";
 import { Button } from "../../components/Button";
 import { groupGetAll } from "../../storage/group/groupGetAll";
+import { Loading } from "../../components/Loading";
 
 export function Groups() {
 
   const[groups, setGroups] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   //useNavigation é o roteador
   /**
@@ -31,10 +33,17 @@ export function Groups() {
 
   async function fetchGroups(){
     try {
+      //exibo loading
+      setIsLoading(false);
+      //faco a busca dos grupos
       const data = await groupGetAll();
+      //seto os grupos no meu estado
       setGroups(data);
     } catch (error) {
       console.log(error)
+    } finally {
+      //fecho o loading
+      setIsLoading(false);
     }
   }
 
@@ -54,24 +63,27 @@ export function Groups() {
       <Header />
       <Highlight title="Turmas" subtitle="Jogue com a sua turma." />
 
-      <FlatList 
-        data={groups}
-        //keyExtractor recebe um parametro item, nao da pra mudar
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <GroupCard 
+      {
+        isLoading ? <Loading /> : 
+        <FlatList 
+          data={groups}
+          //keyExtractor recebe um parametro item, nao da pra mudar
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => (
+            <GroupCard 
             title={String(item)}
             onPress={() => handleOpenGroup(item)}
-         />
-        )}
-        //qual componente quero renderizar quando minha lista estiver vazia
-        ListEmptyComponent={() => (
-          <ListEmpty message="Que tal cadastrar a primeira turma?"/>
-        )}
-        //vai centralizar a lista vazia
-        contentContainerStyle={groups.length === 0 && { flex: 1 }}
-        showsVerticalScrollIndicator={false}
-      /> 
+            />
+          )}
+          //qual componente quero renderizar quando minha lista estiver vazia
+          ListEmptyComponent={() => (
+            <ListEmpty message="Que tal cadastrar a primeira turma?"/>
+          )}
+          //vai centralizar a lista vazia
+          contentContainerStyle={groups.length === 0 && { flex: 1 }}
+          showsVerticalScrollIndicator={false}
+        /> 
+      }
 
       <Button title="Criar Nova Turma" onPress={handleNewGroup}/> 
     </S.Container>
