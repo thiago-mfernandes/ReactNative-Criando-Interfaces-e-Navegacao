@@ -38,6 +38,11 @@ export function Groups() {
     }
   }
 
+  function handleOpenGroup(group: string) {
+    //passa o parametro recebido para a rota"
+    navigation.navigate('players', { group: group });
+  }
+
   //useFocusEffect vai ser executado toda vez q eu voltar na tela de groups, haverá um novo fecth no storage e os dados na tela vao se manter atualizados
   useFocusEffect(useCallback(() => {
     console.log("useFocusEffect executou");
@@ -56,7 +61,7 @@ export function Groups() {
         renderItem={({ item }) => (
           <GroupCard 
             title={String(item)}
-            onPress={() => {}}
+            onPress={() => handleOpenGroup(item)}
          />
         )}
         //qual componente quero renderizar quando minha lista estiver vazia
